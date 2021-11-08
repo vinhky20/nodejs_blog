@@ -1,76 +1,76 @@
 //Import model vào để xài
-const Course = require('../models/Course');
+const Post = require('../models/Post');
 //Import phần xử lý bảo mật của handlebars
 const { mongooseToObject } = require('../../util/mongoose');
 
-class CourseController {
-    // [GET] /courses/:slug
+class PostController {
+    // [GET] /posts/:slug
     show(req, res, next) {
-        Course.findOne({ slug: req.params.slug })
-            .then(course =>
-                res.render('courses/show', {
-                    course: mongooseToObject(course)
+        Post.findOne({ slug: req.params.slug })
+            .then(post =>
+                res.render('posts/show', {
+                    post: mongooseToObject(post)
                 })
             )
             .catch(next);
     }
 
-    // [GET] /courses/create
+    // [GET] /posts/create
     create(req, res, next) {
-        res.render('courses/create')
+        res.render('posts/create')
     }
 
-    // [POST] /courses/store
+    // [POST] /posts/store
     store(req, res, next) {
         req.body.image = `https://i.ytimg.com/vi/${req.body.videoId}/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLA-xO9v_zNZz62Jg01hmjZMoC1PSw`;
-        const course = new Course(req.body);
-        course.save()
-            .then(() => res.redirect('/me/stored/courses'))
+        const post = new Post(req.body);
+        post.save()
+            .then(() => res.redirect('/me/stored/posts'))
             .catch(error => {});
     }
 
-    // [GET] /courses/:id/edit
+    // [GET] /posts/:id/edit
     edit(req, res, next) {
-        Course.findById(req.params.id)
-            .then(course => res.render('courses/edit', {
-                course: mongooseToObject(course)
+        Post.findById(req.params.id)
+            .then(post => res.render('posts/edit', {
+                post: mongooseToObject(post)
             }))
             .catch(next)
     }
 
-    // [PUT] /courses/:id
+    // [PUT] /posts/:id
     update(req, res, next) {
-        Course.updateOne({ _id: req.params.id }, req.body)
-            .then(() => res.redirect('/me/stored/courses'))
+        Post.updateOne({ _id: req.params.id }, req.body)
+            .then(() => res.redirect('/me/stored/posts'))
             .catch(next);
     }
 
-    // [DELETE] /courses/:id
+    // [DELETE] /posts/:id
     delete(req, res, next) {
-        Course.delete({ _id: req.params.id })
+        Post.delete({ _id: req.params.id })
             .then(() => res.redirect('back'))
             .catch(next);
     }
 
-    // [DELETE] /courses/:id/force
+    // [DELETE] /posts/:id/force
     forceDelete(req, res, next) {
-        Course.deleteOne({ _id: req.params.id })
+        Post.deleteOne({ _id: req.params.id })
             .then(() => res.redirect('back'))
             .catch(next);
     }
 
-    // [PATCH] /courses/:id/restore
+    // [PATCH] /posts/:id/restore
     restore(req, res, next) {
-        Course.restore({ _id: req.params.id })
+        Post.restore({ _id: req.params.id })
             .then(() => res.redirect('back'))
             .catch(next);
     }
 
-    // [POST] /courses/handle-form-actions
+    // [POST] /posts/handle-form-actions
     handleFormActions(req, res, next) {
         switch (req.body.action) {
             case 'delete':
-                Course.delete({ _id: { $in: req.body.courseIds } })
+                Post.delete({ _id: { $in: req.body.postIds } })
                     .then(() => res.redirect('back'))
                     .catch(next);
 
@@ -81,4 +81,4 @@ class CourseController {
     }
 }
 
-module.exports = new CourseController;
+module.exports = new PostController;

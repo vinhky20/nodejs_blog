@@ -1,5 +1,5 @@
 //Import model vào để xài
-const Course = require('../models/Course');
+const Post = require('../models/Post');
 //Import phần xử lý bảo mật của handlebars
 const { multipleMongooseToObject } = require('../../util/mongoose');
 
@@ -7,10 +7,10 @@ class SiteController {
 
     // [GET] /
     index(req, res, next) {
-        Course.find({})
-            .then(courses => {
+        Post.find({})
+            .then(posts => {
                 res.render('home', {
-                    courses: multipleMongooseToObject(courses)
+                    posts: multipleMongooseToObject(posts)
                 });
             })
             .catch(next);

@@ -1,43 +1,43 @@
 //Import model vào để xài
-const Course = require('../models/Course');
+const Post = require('../models/Post');
 //Import phần xử lý bảo mật của handlebars
 const { multipleMongooseToObject } = require('../../util/mongoose');
 
 class MeController {
 
-    // [GET] /me/stored/courses
-    storedCourses(req, res, next) {
+    // [GET] /me/stored/posts
+    storedPosts(req, res, next) {
 
-        Promise.all([Course.find({}), Course.countDocumentsDeleted()])
-            .then(([courses, deletedCount]) =>
-                res.render('me/stored-courses', {
+        Promise.all([Post.find({}), Post.countDocumentsDeleted()])
+            .then(([posts, deletedCount]) =>
+                res.render('me/stored-posts', {
                     deletedCount,
-                    courses: multipleMongooseToObject(courses)
+                    posts: multipleMongooseToObject(posts)
                 })
             )
             .catch(next);
 
-        // Course.countDocumentsDeleted()
+        // Post.countDocumentsDeleted()
         //     .then((deletedCount) => {
         //         console.log(deletedCount);
         //     })
         //     .catch(() => {});
 
-        // Course.find({})
-        //     .then(courses => {
-        //         res.render('me/stored-courses', {
-        //             courses: multipleMongooseToObject(courses)
+        // Post.find({})
+        //     .then(posts => {
+        //         res.render('me/stored-posts', {
+        //             posts: multipleMongooseToObject(posts)
         //         });
         //     })
         //     .catch(next);
     }
 
-    // [GET] /me/trash/courses
-    trashCourses(req, res, next) {
-        Course.findDeleted({})
-            .then(courses => {
-                res.render('me/trash-courses', {
-                    courses: multipleMongooseToObject(courses)
+    // [GET] /me/trash/posts
+    trashPosts(req, res, next) {
+        Post.findDeleted({})
+            .then(posts => {
+                res.render('me/trash-posts', {
+                    posts: multipleMongooseToObject(posts)
                 });
             })
             .catch(next);
